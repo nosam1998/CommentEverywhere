@@ -11,14 +11,84 @@ import (
 	"github.com/nosam1998/CommentEverywhereBackend/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// AddUser is the resolver for the addUser field.
+func (r *mutationResolver) AddUser(ctx context.Context, username string, email string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: AddUser - addUser"))
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+// DeleteUser is the resolver for the deleteUser field.
+func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
+}
+
+// UserActiveSwitch is the resolver for the userActiveSwitch field.
+func (r *mutationResolver) UserActiveSwitch(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UserActiveSwitch - userActiveSwitch"))
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *mutationResolver) AddComment(ctx context.Context, userID string, body string, url string, currentPlayerTime float64) (*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: AddComment - addComment"))
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *mutationResolver) DeleteComment(ctx context.Context, id string) (*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: DeleteComment - deleteComment"))
+}
+
+// MarkCommentAsSpoiler is the resolver for the markCommentAsSpoiler field.
+func (r *mutationResolver) MarkCommentAsSpoiler(ctx context.Context, userID string, commentID string) (*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: MarkCommentAsSpoiler - markCommentAsSpoiler"))
+}
+
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
+}
+
+// UserByUsername is the resolver for the userByUsername field.
+func (r *queryResolver) UserByUsername(ctx context.Context, username string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: UserByUsername - userByUsername"))
+}
+
+// Users is the resolver for the users field.
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: Users - users"))
+}
+
+// UsersTopBySpoilerScore is the resolver for the usersTopBySpoilerScore field.
+func (r *queryResolver) UsersTopBySpoilerScore(ctx context.Context, count int) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: UsersTopBySpoilerScore - usersTopBySpoilerScore"))
+}
+
+// UsersTopByCommentCount is the resolver for the usersTopByCommentCount field.
+func (r *queryResolver) UsersTopByCommentCount(ctx context.Context, count int) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: UsersTopByCommentCount - usersTopByCommentCount"))
+}
+
+// UsersTopByRespect is the resolver for the usersTopByRespect field.
+func (r *queryResolver) UsersTopByRespect(ctx context.Context, count int) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: UsersTopByRespect - usersTopByRespect"))
+}
+
+// Comment is the resolver for the comment field.
+func (r *queryResolver) Comment(ctx context.Context, id string) (*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: Comment - comment"))
+}
+
+// CommentsByVideoIdentifier is the resolver for the commentsByVideoIdentifier field.
+func (r *queryResolver) CommentsByVideoIdentifier(ctx context.Context, href string, currentPlayerTime float64, limitCount *int) ([]*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: CommentsByVideoIdentifier - commentsByVideoIdentifier"))
+}
+
+// CommentsByHost is the resolver for the commentsByHost field.
+func (r *queryResolver) CommentsByHost(ctx context.Context, host string, currentPlayerTime float64, limitCount *int) ([]*model.Comment, error) {
+	panic(fmt.Errorf("not implemented: CommentsByHost - commentsByHost"))
+}
+
+// CommentCreated is the resolver for the commentCreated field.
+func (r *subscriptionResolver) CommentCreated(ctx context.Context) (<-chan *model.Comment, error) {
+	panic(fmt.Errorf("not implemented: CommentCreated - commentCreated"))
 }
 
 // Mutation returns MutationResolver implementation.
@@ -27,5 +97,9 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }

@@ -2,19 +2,95 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type Comment struct {
+	ID           *string     `json:"id,omitempty"`
+	User         *User       `json:"user,omitempty"`
+	Body         *string     `json:"body,omitempty"`
+	SpoilerCount *int        `json:"spoilerCount,omitempty"`
+	URL          *CommentURL `json:"url,omitempty"`
+	PlayerTime   *float64    `json:"playerTime,omitempty"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type CommentURL struct {
+	Href         *string                   `json:"href,omitempty"`
+	Origin       *string                   `json:"origin,omitempty"`
+	Protocol     *string                   `json:"protocol,omitempty"`
+	Username     *string                   `json:"username,omitempty"`
+	Password     *string                   `json:"password,omitempty"`
+	Host         *string                   `json:"host,omitempty"`
+	Hostname     *string                   `json:"hostname,omitempty"`
+	Port         *string                   `json:"port,omitempty"`
+	Pathname     *string                   `json:"pathname,omitempty"`
+	Search       *string                   `json:"search,omitempty"`
+	SearchParams []*CommentURLSearchParams `json:"searchParams,omitempty"`
+	Hash         *string                   `json:"hash,omitempty"`
+}
+
+type CommentURLSearchParams struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID       *string     `json:"id,omitempty"`
+	Status   *UserStatus `json:"status,omitempty"`
+	Username *string     `json:"username,omitempty"`
+	Email    *string     `json:"email,omitempty"`
+	IP       *string     `json:"ip,omitempty"`
+	Stats    *UserStats  `json:"stats,omitempty"`
+}
+
+type UserStats struct {
+	SpoilerScore *int `json:"spoilerScore,omitempty"`
+	CommentCount *int `json:"commentCount,omitempty"`
+	Respect      *int `json:"respect,omitempty"`
+}
+
+type UserStatus string
+
+const (
+	UserStatusBanned      UserStatus = "BANNED"
+	UserStatusDeactivated UserStatus = "DEACTIVATED"
+	UserStatusActivated   UserStatus = "ACTIVATED"
+)
+
+var AllUserStatus = []UserStatus{
+	UserStatusBanned,
+	UserStatusDeactivated,
+	UserStatusActivated,
+}
+
+func (e UserStatus) IsValid() bool {
+	switch e {
+	case UserStatusBanned, UserStatusDeactivated, UserStatusActivated:
+		return true
+	}
+	return false
+}
+
+func (e UserStatus) String() string {
+	return string(e)
+}
+
+func (e *UserStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserStatus", str)
+	}
+	return nil
+}
+
+func (e UserStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
