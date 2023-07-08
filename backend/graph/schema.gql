@@ -2,27 +2,85 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
+# TODO: Improve/Update the schema below to include fragments and general design improvements.
 
-type User {
-  id: ID!
-  name: String!
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
 }
 
 type Query {
-  todos: [Todo!]!
-}
-
-input NewTodo {
-  text: String!
-  userId: String!
+    user(id: ID!): User
+    userByUsername(username: String!): User
+    users: [User]
+    usersTopBySpoilerScore(count: Int!): [User]
+    usersTopByCommentCount(count: Int!): [User]
+    usersTopByRespect(count: Int!): [User]
+    comment(id: ID!): Comment
+    commentsByVideoIdentifier(href: String!, currentPlayerTime: Float!, limitCount: Int): [Comment]
+    commentsByHost(host: String!, currentPlayerTime: Float!, limitCount: Int): [Comment]
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+    addUser(username: String!, email: String!): User
+    deleteUser(id: ID!): User
+    userActiveSwitch(id: ID!): User
+    addComment(userId: String!, body: String!, url: String!, currentPlayerTime: Float!): Comment
+    deleteComment(id: ID!): Comment
+    markCommentAsSpoiler(userId: String!, commentId: ID!): Comment
+}
+
+type Subscription {
+    commentCreated: Comment
+}
+
+type UserStats {
+    spoilerScore: Int
+    commentCount: Int
+    respect: Int
+}
+
+enum UserStatus {
+    BANNED
+    DEACTIVATED
+    ACTIVATED
+}
+
+type User {
+    id: ID
+    status: UserStatus
+    username: String
+    email: String
+    ip: String
+    stats: UserStats
+}
+
+type CommentUrlSearchParams {
+    key: String
+    value: String
+}
+
+type CommentUrl {
+    href: String
+    origin: String
+    protocol: String
+    username: String
+    password: String
+    host: String
+    hostname: String
+    port: String
+    pathname: String
+    search: String
+    searchParams: [CommentUrlSearchParams]
+    hash: String
+}
+
+type Comment {
+    id: ID
+    user: User
+    body: String
+    spoilerCount: Int
+    url: CommentUrl
+    playerTime: Float
 }
